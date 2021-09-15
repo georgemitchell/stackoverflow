@@ -1,5 +1,5 @@
 from pytz import country_timezones
-from language_codes import locale_by_country
+from .language_codes import locale_by_country
 import re
 
 locale_by_timezone = {}
@@ -15,19 +15,17 @@ for code in country_timezones:
 for timezone in country_by_timezone:
     country_code = country_by_timezone[timezone]
     if country_code not in locale_by_country:
-        print "Unable to find %s in locale_by_country" % country_code
+        raise IndexError(f"Unable to find {country_code} in locale_by_country")
     else:
         languages = locale_by_country[country_code]["languages"]
         locale_by_timezone[timezone] = [l.strip() for l in languages.split(",")]
 
 if __name__ == "__main__":
-    print "Enter a timezone and get a list of possible languages"
     timezone = "America/Chicago"
-    print "Example: '%s':" % timezone
     while timezone != "":
         if timezone not in locale_by_timezone:
-            print "Unable to locate timezone: '%s'" % timezone
+            raise IndexError(f"Unable to locate timezone: '{timezone}'")
         else:
             for i, language in enumerate(locale_by_timezone[timezone]):
-                print "%d) %s" % (i+1, language)
+                print("%d) %s" % (i+1, language))
         timezone = raw_input("Timezone: ")
